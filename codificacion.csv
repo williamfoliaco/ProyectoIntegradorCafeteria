@@ -1,0 +1,278 @@
+﻿archivo,numero_linea,codigo_fuente;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Producto.java,1,package cafeteria;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Producto.java,2,;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Producto.java,3,public abstract class Producto {;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Producto.java,4,    private final String nombre;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Producto.java,5,    private final double precio;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Producto.java,6,;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+"Producto.java,7,""    public Producto(String nombre, double precio) {""";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Producto.java,8,        if (nombre == null || nombre.trim().isEmpty()) {;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+"Producto.java,9,""            throw new IllegalArgumentException(""""El nombre del producto es obligatorio."""")";"
+Producto.java,10,        }
+Producto.java,11,        if (precio < 0) {
+Producto.java,12,            throw new IllegalArgumentException(""""El precio no puede ser negativo."""")";"
+Producto.java,13,        }
+Producto.java,14,        this.nombre = nombre;
+Producto.java,15,        this.precio = precio;
+Producto.java,16,    }
+Producto.java,17,
+Producto.java,18,    public String getNombre() {
+Producto.java,19,        return nombre;
+Producto.java,20,    }
+Producto.java,21,
+Producto.java,22,    public double getPrecio() {
+Producto.java,23,        return precio;
+Producto.java,24,    }
+Producto.java,25,
+Producto.java,26,    public abstract String getTipo();
+Producto.java,27,}
+bebida.java,1,package cafeteria;
+bebida.java,2,
+bebida.java,3,public class bebida extends Producto {
+bebida.java,4,    public bebida(String nombre, double precio) {""";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+"bebida.java,5,""        super(nombre, precio)";"
+bebida.java,6,    }
+bebida.java,7,
+bebida.java,8,    @Override
+bebida.java,9,    public String getTipo() {
+bebida.java,10,        return """"bebida""""";"
+bebida.java,11,    }
+bebida.java,12,}
+Comida.java,1,package cafeteria;
+Comida.java,2,
+Comida.java,3,public class Comida extends Producto {
+Comida.java,4,    public Comida(String nombre, double precio) {""";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+"Comida.java,5,""        super(nombre, precio)";"
+Comida.java,6,    }
+Comida.java,7,
+Comida.java,8,    @Override
+Comida.java,9,    public String getTipo() {
+Comida.java,10,        return """"Comida""""";"
+Comida.java,11,    }
+Comida.java,12,}
+ReglaDescuento.java,1,package cafeteria;
+ReglaDescuento.java,2,
+ReglaDescuento.java,3,@FunctionalInterface
+ReglaDescuento.java,4,public interface ReglaDescuento {
+ReglaDescuento.java,5,    double calcularDescuento(double total);
+ReglaDescuento.java,6,}
+CalculadoreDeDescuento.java,1,package cafeteria;
+CalculadoreDeDescuento.java,2,
+CalculadoreDeDescuento.java,3,public class CalculadoreDeDescuento {
+CalculadoreDeDescuento.java,4,    private static final double UMBRAL = 10.0;
+CalculadoreDeDescuento.java,5,    private static final double PORCENTAJE = 0.15;
+CalculadoreDeDescuento.java,6,
+CalculadoreDeDescuento.java,7,    private final ReglaDescuento regla;
+CalculadoreDeDescuento.java,8,
+CalculadoreDeDescuento.java,9,    public CalculadoreDeDescuento() {
+CalculadoreDeDescuento.java,10,        this.regla = total -> total > UMBRAL ? total * PORCENTAJE : 0.0;
+CalculadoreDeDescuento.java,11,    }
+CalculadoreDeDescuento.java,12,
+CalculadoreDeDescuento.java,13,    public double calcularDescuento(double total) {
+CalculadoreDeDescuento.java,14,        if (total < 0) {
+CalculadoreDeDescuento.java,15,            throw new IllegalArgumentException(""""El total no puede ser negativo."""")";"
+CalculadoreDeDescuento.java,16,        }
+CalculadoreDeDescuento.java,17,        return regla.calcularDescuento(total);
+CalculadoreDeDescuento.java,18,    }
+CalculadoreDeDescuento.java,19,
+CalculadoreDeDescuento.java,20,    public double calcularTotalFinal(double total) {
+CalculadoreDeDescuento.java,21,        return total - calcularDescuento(total);
+CalculadoreDeDescuento.java,22,    }
+CalculadoreDeDescuento.java,23,}
+Cafeteria.java,1,package cafeteria;
+Cafeteria.java,2,
+Cafeteria.java,3,import java.nio.file.Files;
+Cafeteria.java,4,import java.nio.file.Paths;
+Cafeteria.java,5,import java.sql.Connection;
+Cafeteria.java,6,import java.sql.DriverManager;
+Cafeteria.java,7,import java.sql.SQLException;
+Cafeteria.java,8,import java.sql.Statement;
+Cafeteria.java,9,import java.io.IOException;
+Cafeteria.java,10,
+Cafeteria.java,11,public final class Cafeteria {
+Cafeteria.java,12,    private static final String URL =
+Cafeteria.java,13,            """"jdbc:h2:./base_datos/cafeteria";"DB_CLOSE_ON_EXIT=FALSE""""";"
+Cafeteria.java,14,    private static final String USUARIO = """"sa""""";"
+Cafeteria.java,15,    private static final String CLAVE = """"""""";"
+Cafeteria.java,16,
+Cafeteria.java,17,    private Cafeteria() {
+Cafeteria.java,18,    }
+Cafeteria.java,19,
+Cafeteria.java,20,    public static Connection conectar() throws SQLException {
+Cafeteria.java,21,        try {
+Cafeteria.java,22,            Files.createDirectories(Paths.get(""""base_datos""""))";"
+Cafeteria.java,23,        } catch (IOException ex) {
+Cafeteria.java,24,            throw new SQLException(""""No se pudo crear la carpeta base_datos."""", ex)";"
+Cafeteria.java,25,        }
+Cafeteria.java,26,        return DriverManager.getConnection(URL, USUARIO, CLAVE)";"
+Cafeteria.java,27,    }
+Cafeteria.java,28,
+Cafeteria.java,29,    public static void inicializar() throws SQLException {
+Cafeteria.java,30,        String sql = """"CREATE TABLE IF NOT EXISTS pedidos (""""""";;;;;;;;;;;;;;;;;;;;;;;;;;
+"Cafeteria.java,31,""                + """"id BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY, """"""";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+"Cafeteria.java,32,""                + """"fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP, """"""";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+"Cafeteria.java,33,""                + """"subtotal DECIMAL(12,2) NOT NULL, """"""";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+"Cafeteria.java,34,""                + """"descuento DECIMAL(12,2) NOT NULL, """"""";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+"Cafeteria.java,35,""                + """"total_final DECIMAL(12,2) NOT NULL)""""";"
+Cafeteria.java,36,        try (Connection conexion = conectar();
+Cafeteria.java,37,             Statement sentencia = conexion.createStatement()) {
+Cafeteria.java,38,            sentencia.execute(sql);
+Cafeteria.java,39,        }
+Cafeteria.java,40,    }
+Cafeteria.java,41,}
+Pedido.java,1,package cafeteria;
+Pedido.java,2,
+Pedido.java,3,import java.sql.Connection;
+Pedido.java,4,import java.sql.PreparedStatement;
+Pedido.java,5,import java.sql.SQLException;
+Pedido.java,6,
+Pedido.java,7,public class Pedido{
+Pedido.java,8,    public void guardar(double subtotal, double descuento, double totalFinal)""";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Pedido.java,9,            throws SQLException {;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+"Pedido.java,10,""        String sql = """"INSERT INTO pedidos (subtotal, descuento, total_final) """"""";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+"Pedido.java,11,""                + """"VALUES (?, ?, ?)""""";"
+Pedido.java,12,
+Pedido.java,13,        try (Connection conexion = ConexionBD.conectar();
+Pedido.java,14,             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
+Pedido.java,15,            sentencia.setDouble(1, subtotal)";"
+Pedido.java,16,            sentencia.setDouble(2, descuento)";"
+Pedido.java,17,            sentencia.setDouble(3, totalFinal)";"
+Pedido.java,18,            sentencia.executeUpdate();
+Pedido.java,19,        }
+Pedido.java,20,    }
+Pedido.java,21,}
+VentanaCafeteria.java,1,package cafeteria;
+VentanaCafeteria.java,2,
+VentanaCafeteria.java,3,import java.awt.BorderLayout;
+VentanaCafeteria.java,4,import java.awt.Font;
+VentanaCafeteria.java,5,import java.awt.GridBagConstraints;
+VentanaCafeteria.java,6,import java.awt.GridBagLayout;
+VentanaCafeteria.java,7,import java.awt.Insets;
+VentanaCafeteria.java,8,import java.sql.SQLException;
+VentanaCafeteria.java,9,import java.text.NumberFormat;
+VentanaCafeteria.java,10,import java.util.Locale;
+VentanaCafeteria.java,11,import javax.swing.BorderFactory;
+VentanaCafeteria.java,12,import javax.swing.JButton;
+VentanaCafeteria.java,13,import javax.swing.JFrame;
+VentanaCafeteria.java,14,import javax.swing.JLabel;
+VentanaCafeteria.java,15,import javax.swing.JPanel;
+VentanaCafeteria.java,16,import javax.swing.JScrollPane;
+VentanaCafeteria.java,17,import javax.swing.JTextArea;
+VentanaCafeteria.java,18,import javax.swing.JTextField;
+VentanaCafeteria.java,19,import javax.swing.SwingUtilities;
+VentanaCafeteria.java,20,
+VentanaCafeteria.java,21,public class VentanaCafeteria extends JFrame {
+VentanaCafeteria.java,22,    private final JTextField totalField = new JTextField(18);
+VentanaCafeteria.java,23,    private final JTextArea salida = new JTextArea(10, 42)";"
+VentanaCafeteria.java,24,    private final JButton calcularButton = new JButton(""""Calcular descuento"""")";"
+VentanaCafeteria.java,25,    private final CalculadoreDeDescuento calculadora = new CalculadoreDeDescuento();    
+VentanaCafeteria.java,26,    private final Pedido pedidoDAO = new Pedido();
+VentanaCafeteria.java,27,    private final NumberFormat formato = NumberFormat.getCurrencyInstance(new Locale(""""es"""", """"CO""""))";"
+VentanaCafeteria.java,28,
+VentanaCafeteria.java,29,    public VentanaCafeteria() {
+VentanaCafeteria.java,30,        configurarVentana();
+VentanaCafeteria.java,31,        construirInterfaz();
+VentanaCafeteria.java,32,        comprobarConexion();
+VentanaCafeteria.java,33,    }
+VentanaCafeteria.java,34,
+VentanaCafeteria.java,35,    private void configurarVentana() {
+VentanaCafeteria.java,36,        setTitle(""""Sistema de descuentos - Cafeteria"""")";"
+VentanaCafeteria.java,37,        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+VentanaCafeteria.java,38,        setSize(620, 440)";"
+VentanaCafeteria.java,39,        setLocationRelativeTo(null);
+VentanaCafeteria.java,40,        setResizable(false);
+VentanaCafeteria.java,41,    }
+VentanaCafeteria.java,42,
+VentanaCafeteria.java,43,    private void construirInterfaz() {
+VentanaCafeteria.java,44,        JPanel principal = new JPanel(new BorderLayout(12, 12))";"
+VentanaCafeteria.java,45,        principal.setBorder(BorderFactory.createEmptyBorder(20, 24, 20, 24))";"
+VentanaCafeteria.java,46,
+VentanaCafeteria.java,47,        JLabel titulo = new JLabel(""""Gestion de descuentos de pedidos"""")";"
+VentanaCafeteria.java,48,        titulo.setFont(new Font(""""SansSerif"""", Font.BOLD, 20))";"
+VentanaCafeteria.java,49,        principal.add(titulo, BorderLayout.NORTH)";"
+VentanaCafeteria.java,50,
+VentanaCafeteria.java,51,        JPanel formulario = new JPanel(new GridBagLayout());
+VentanaCafeteria.java,52,        GridBagConstraints c = new GridBagConstraints();
+VentanaCafeteria.java,53,        c.insets = new Insets(8, 5, 8, 5)";"
+VentanaCafeteria.java,54,        c.anchor = GridBagConstraints.WEST;
+VentanaCafeteria.java,55,
+VentanaCafeteria.java,56,        c.gridx = 0;
+VentanaCafeteria.java,57,        c.gridy = 0;
+VentanaCafeteria.java,58,        formulario.add(new JLabel(""""Monto total del pedido:""""), c)";"
+VentanaCafeteria.java,59,
+VentanaCafeteria.java,60,        c.gridx = 1;
+VentanaCafeteria.java,61,        formulario.add(totalField, c)";"
+VentanaCafeteria.java,62,
+VentanaCafeteria.java,63,        c.gridx = 1;
+VentanaCafeteria.java,64,        c.gridy = 1;
+VentanaCafeteria.java,65,        c.anchor = GridBagConstraints.EAST;
+VentanaCafeteria.java,66,        formulario.add(calcularButton, c)";"
+VentanaCafeteria.java,67,
+VentanaCafeteria.java,68,        salida.setEditable(false);
+VentanaCafeteria.java,69,        salida.setLineWrap(true);
+VentanaCafeteria.java,70,        salida.setWrapStyleWord(true);
+VentanaCafeteria.java,71,        salida.setFont(new Font(""""Monospaced"""", Font.PLAIN, 12))";"
+VentanaCafeteria.java,72,
+VentanaCafeteria.java,73,        JPanel centro = new JPanel(new BorderLayout(8, 8))";"
+VentanaCafeteria.java,74,        centro.add(formulario, BorderLayout.NORTH)";"
+VentanaCafeteria.java,75,        centro.add(new JScrollPane(salida), BorderLayout.CENTER)";"
+VentanaCafeteria.java,76,        principal.add(centro, BorderLayout.CENTER)";"
+VentanaCafeteria.java,77,
+VentanaCafeteria.java,78,        calcularButton.addActionListener(evento -> calcularYGuardar());
+VentanaCafeteria.java,79,        totalField.addActionListener(evento -> calcularYGuardar());
+VentanaCafeteria.java,80,
+VentanaCafeteria.java,81,        setContentPane(principal);
+VentanaCafeteria.java,82,    }
+VentanaCafeteria.java,83,
+VentanaCafeteria.java,84,    private void comprobarConexion() {
+VentanaCafeteria.java,85,        try {
+VentanaCafeteria.java,86,            Cafeteria.inicializar();
+VentanaCafeteria.java,87,            salida.append(""""Conexion con H2 establecida correctamente."""")";"
+VentanaCafeteria.java,88,            salida.append(""""La tabla de pedidos esta lista."""")";"
+VentanaCafeteria.java,89,        } catch (SQLException ex) {
+VentanaCafeteria.java,90,            salida.append(""""ERROR DE CONEXION CON H2:"""")";"
+VentanaCafeteria.java,91,            salida.append(ex.getMessage() """")";"
+VentanaCafeteria.java,92,        }
+VentanaCafeteria.java,93,    }
+VentanaCafeteria.java,94,
+VentanaCafeteria.java,95,    private void calcularYGuardar() {
+VentanaCafeteria.java,96,        String texto = totalField.getText().trim().replace("""","""", """"."""")";"
+VentanaCafeteria.java,97,        if (texto.isEmpty()) {
+VentanaCafeteria.java,98,            salida.append(""""Ingrese el monto total del pedido."""")";"
+VentanaCafeteria.java,99,            return;
+VentanaCafeteria.java,100,        }
+VentanaCafeteria.java,101,
+VentanaCafeteria.java,102,        try {
+VentanaCafeteria.java,103,            double subtotal = Double.parseDouble(texto);
+VentanaCafeteria.java,104,            if (!Double.isFinite(subtotal) || subtotal < 0) {
+VentanaCafeteria.java,105,                salida.append(""""Ingrese un monto numerico valido y no negativo."""")";"
+VentanaCafeteria.java,106,                return;
+VentanaCafeteria.java,107,            }
+VentanaCafeteria.java,108,
+VentanaCafeteria.java,109,            double descuento = calculadora.calcularDescuento(subtotal);
+VentanaCafeteria.java,110,            double totalFinal = calculadora.calcularTotalFinal(subtotal);
+VentanaCafeteria.java,111,
+VentanaCafeteria.java,112,            salida.append(""""Resultado del pedido"""")";"
+VentanaCafeteria.java,113,            salida.append(""""Subtotal: """" + formato.format(subtotal))";"
+VentanaCafeteria.java,114,            salida.append(""""Descuento: """" + formato.format(descuento))";"
+VentanaCafeteria.java,115,            salida.append(""""Total a pagar: """" + formato.format(totalFinal))";"
+VentanaCafeteria.java,116,
+VentanaCafeteria.java,117,            try {
+VentanaCafeteria.java,118,                pedido.guardar(subtotal, descuento, totalFinal)";"
+VentanaCafeteria.java,119,                salida.append(""""Pedido guardado correctamente en H2."""")";"
+VentanaCafeteria.java,120,            } catch (SQLException ex) {
+VentanaCafeteria.java,121,                salida.append(""""No se pudo guardar el pedido: """""""
+VentanaCafeteria.java,122,                        + ex.getMessage());;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+VentanaCafeteria.java,123,            };;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+VentanaCafeteria.java,124,        } catch (NumberFormatException ex) {;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+"VentanaCafeteria.java,125,""            salida.append(""""Monto invalido. Escriba un numero."""")";"
+VentanaCafeteria.java,126,        } catch (IllegalArgumentException ex) {
+VentanaCafeteria.java,127,            salida.append(ex.getMessage());
+VentanaCafeteria.java,128,        }
+VentanaCafeteria.java,129,    }
+VentanaCafeteria.java,130,
+VentanaCafeteria.java,131,    public static void main(String[] args) {
+VentanaCafeteria.java,132,        SwingUtilities.invokeLater(() -> new VentanaCafeteria().setVisible(true));
+VentanaCafeteria.java,133,    }
+VentanaCafeteria.java,134,}
+";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
